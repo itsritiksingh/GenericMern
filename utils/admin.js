@@ -61,19 +61,20 @@ class MyProvider extends BaseProvider {
   //       resource: reportModel
   //     },
   //   ],
-    rootPath: "/admin"
+    // rootPath: "/admin"
   });
   
   exports.adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
     authenticate: async (email, password) => {
-    //   const user = await User.findOne({ email })
-    //   if (user) {
-    //     const matched = await bcrypt.compare(password, user.encryptedPassword)
-    //     if (matched) {
-    //       return user
-    //     }
-    //   }
-    //   return false
+      // const user = await User.findOne({ email })
+      // if (user) {
+      //   const matched = await bcrypt.compare(password, user.encryptedPassword)
+      //   if (matched) {
+      //     return user
+      //   }
+      // }
+
+      return {email: "ritik"}
     },
     cookiePassword: 'a1d03a14203ebf4c967c6f3173f4a21b46fb678a948abaf2d945efb51e09',
   })

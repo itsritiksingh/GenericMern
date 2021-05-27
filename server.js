@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt')
 const fs = require('fs');
-const {adminRouter} = require("./admin");
+const {adminRouter} = require("./utils/admin");
+const {ensureAuthenticated,passportInitailize} = require("./utils/passportUtils");
+const router = require("./Routes/demotoutes");
 
 mongoose
   .connect(
@@ -14,7 +16,7 @@ mongoose
   ).then(() => console.log("mongoose connected"))
   .catch((e) => console.log(e));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7000;
 
 var allowCrossDomain = function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -24,13 +26,15 @@ var allowCrossDomain = function (req, res, next) {
   next();
 };
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(allowCrossDomain);
 app.use(express.static("views"));
 
+passportInitailize(app);
 
 app.use("/admin",adminRouter);
+app.use(express.urlencoded({ extended: true }));
+
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -52,6 +56,12 @@ app.post("/login", (req, res) => {
     });
   });
 });
+
+app.use("/project",router)
+
+app.get("/",(req,res)=>{
+  res.send("at path /");
+})
 
 app.listen(PORT, () => {
   console.log("server started");
